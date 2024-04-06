@@ -1,5 +1,5 @@
 .PHONY: clean clean-build clean-pyc clean-test coverage dist docs help install lint lint/flake8
-        {%- if cookiecutter.use_black == 'y' %} lint/black{% endif %}
+		{%- if cookiecutter.use_ruff == 'y' %} lint/ruff{% endif %}
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -49,14 +49,12 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint/flake8: ## check style with flake8
-	flake8 {{ cookiecutter.project_slug }} tests
+	flake8 src/ tests
 
-{%- if cookiecutter.use_black == 'y' %}
-lint/black: ## check style with black
-	black --check {{ cookiecutter.project_slug }} tests
+{%- if cookiecutter.use_ruff == 'y' %}
+lint/ruff:  ## check style with ruff
+	ruff check src/
 {%- endif %}
-
-lint: lint/flake8{%- if cookiecutter.use_black == 'y' %} lint/black{%- endif %} ## check style
 
 test: ## run tests quickly with the default Python
 {%- if cookiecutter.use_pytest == 'y' %}

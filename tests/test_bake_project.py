@@ -334,14 +334,14 @@ def test_bake_with_argparse_console_script_cli(cookies):
     assert 'Show this message' in help_result.output
 
 
-@pytest.mark.parametrize("use_black,expected", [("y", True), ("n", False)])
-def test_black(cookies, use_black, expected):
+@pytest.mark.parametrize("use_ruff,expected", [("y", True), ("n", False)])
+def test_ruff(cookies, use_ruff, expected):
     with bake_in_temp_dir(
         cookies,
-        extra_context={'use_black': use_black}
+        extra_context={'use_ruff': use_ruff}
     ) as result:
         assert result.project.isdir()
         requirements_path = result.project.join('requirements_dev.txt')
-        assert ("black" in requirements_path.read()) is expected
+        assert ("ruff" in requirements_path.read()) is expected
         makefile_path = result.project.join('Makefile')
-        assert ("black --check" in makefile_path.read()) is expected
+        assert ("ruff check" in makefile_path.read()) is expected
